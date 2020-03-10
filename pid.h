@@ -45,9 +45,7 @@ namespace pidlib {
             Pid();
             ~Pid(); 
 
-            // Init PID controller:
-            // - set sampling frequency
-            // - decimal cases to keep
+            // Init PID controller
             void init(T frequency, T DP){
                 f = frequency;
                 DP = DP;
@@ -68,6 +66,7 @@ namespace pidlib {
                 lowercap = lowercap;
             }
 
+            // Compute PID controll signal
             T run(const T& error){
                 // Calculate gains
                 a0 = Kp * (DP + DP * DP / (2 * Ti * f) + Td * f) / DP;
@@ -76,6 +75,10 @@ namespace pidlib {
 
                 // Calculate controll signal
                 u[0] = u[1] + (a0 * e[0] + a1 * e[1] + a2 * e[2]) / DP;
+
+                // Limit controll signal
+                !(u[0] > uppercap) ?: u[0] = uppercap;
+                !(u[0] < lowercap) ?: u[0] = lowercap;
 
                 // Update Controll and Error signals
                 u[1] = u[0];
@@ -89,39 +92,3 @@ namespace pidlib {
 
 
 #endif
-
-/* PID Parameters (x100)
-const uint16_t Kpx = 100, Tdx = 10, Tix = 10;
-const uint16_t Kpy = 100, Tdy = 10, Tiy = 10;
-
-uint32_t a0x, a1x, a2x;
-uint32_t a0y, a1y, a2y;
-
-int32_t ex[3] = {0}, ey[3] = {0};
-int32_t ux[2] = {50}, uy[2] = {50};
-
-uint32_t posx = 0, posy = 0;
-uint32_t posx2 = 0;
-
-// PID Coeficients Calculation (x100)
-a0x = Kpx * (DP + DP * DP / (2 * Tix * f) + Tdx * f) / DP;
-a1x = Kpx * (DP * DP / (2 * Tix * f) - 2 * Tdx * f - DP) / DP;
-a2x = Kpx * Tdx * f / DP;
-
-printf("\r\na0x = %d | a1x = %d | a2x = %d", a0x, a1x, a2x);
-
-a0y = Kpy * (DP + DP * DP / (2 * Tiy * f) + Tdy * f) / DP;
-a1y = Kpy * (DP * DP / (2 * Tiy * f) - 2 * Tdy * f - DP) / DP;
-a2y = Kpy * Tdy * f / DP;
-
-printf("\r\na0y = %d | a1y = %d | a2y = %d", a0y, a1y, a2y);
-
-ey[0] = setPointy - posy;
-uy[0] = uy[1] + (a0y * ey[0] + a1y * ey[1] + a2y * ey[2]) / DP;
-
-if (uy[0] > ymaxpwm)
-    uy[0] = ymaxpwm;
-if (uy[0] < 0)
-    uy[0] = 0;
-
-setPWM('y', uy[0]);*/
