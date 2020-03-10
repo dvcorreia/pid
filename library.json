@@ -1,0 +1,23 @@
+{
+  "name": "Pid",
+  "keywords": "pid, embedded, embedded-systems, pid-control, discrete, control",
+  "description": "Light implementation of a discrete PID controller for embedded devices",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/dvcorreia/pid.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Diogo Correia",
+      "email": "dv.correia@ua.pt",
+      "url": "http://www.dvcorreia.com",
+      "maintainer": true
+    }
+  ],
+  "dependencies": [],
+  "version": "0.0.1",
+  "frameworks": "*",
+  "platforms": "*"
+}
